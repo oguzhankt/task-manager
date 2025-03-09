@@ -1,4 +1,11 @@
-using task_manager.Data;
+
+
+using Microsoft.OpenApi.Models;
+using task_manager.Configurations;
+using task_manager.Domain.Contexts;
+using task_manager.Repositories;
+using task_manager.Repositories.Contracts;
+using task_manager.Services;
 
 namespace task_manager;
 public class Program
@@ -13,10 +20,23 @@ public class Program
         string? connectionString = builder.Configuration.GetConnectionString("Database") ?? "Data Source=Database.db";
         builder.Services.AddSqlite<DataContext>(connectionString);
         
+        builder.Services.AddAutoMapper(typeof(MapperConfig));
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        
+        builder.Services.AddScoped<ITaskService, TaskService>();
+        builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+        
+        
+        builder.Services.AddSwaggerGen(config =>
+        {
+            config.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Task Management API",
+                Version = "v1",
+                Description = "Task API used to manage a todo list",
+            });
+        });
 
         var app = builder.Build();
 
