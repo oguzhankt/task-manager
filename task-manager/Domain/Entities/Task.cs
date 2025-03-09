@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace task_manager.Data.Models;
+namespace task_manager.Domain.Entities;
 
 public enum Status
 {
@@ -17,9 +17,11 @@ public class Task
     public Guid Id { get; set; } = Guid.NewGuid();
     
     [Required]
-    public string Title { get; set; }
+    [MaxLength(50)]
+    public string Title { get; set; } = string.Empty;
     
-    public string Description { get; set; }
+    [MaxLength(300)]
+    public string Description { get; set; } = string.Empty;
     
     public Status Status { get; set; }
     
