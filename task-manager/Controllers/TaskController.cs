@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using task_manager.Domain.DTOs;
 using task_manager.Services;
 
@@ -44,7 +45,7 @@ public class TaskController : ControllerBase
     
     [HttpGet]
     public async Task<IEnumerable<Domain.Entities.Task>> GetTask(
-        int limit = 20, int offset = 0, int? status = null, DateTime? startDate = null, DateTime? endDate = null
+        [BindRequired]int limit = 20, [BindRequired]int offset = 0, int? status = null, DateTime? startDate = null, DateTime? endDate = null
         )
     {
         return await _taskService.GetAllAsync(limit, offset, status, startDate, endDate);

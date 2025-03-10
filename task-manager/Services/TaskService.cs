@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using task_manager.Domain.Contexts;
 using task_manager.Domain.DTOs;
 using task_manager.Domain.Entities;
-using task_manager.Repositories.Contracts;
+using task_manager.Domain.Repositories.Contracts;
 using Task = System.Threading.Tasks.Task;
 
 namespace task_manager.Services;

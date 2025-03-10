@@ -1,10 +1,8 @@
-
-
 using Microsoft.OpenApi.Models;
 using task_manager.Configurations;
 using task_manager.Domain.Contexts;
+using task_manager.Domain.Repositories.Contracts;
 using task_manager.Repositories;
-using task_manager.Repositories.Contracts;
 using task_manager.Services;
 
 namespace task_manager;
