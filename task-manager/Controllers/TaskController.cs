@@ -9,26 +9,16 @@ namespace task_manager.Controllers;
 [Route("[controller]")]
 public class TaskController : ControllerBase
 {
-    private readonly IMapper _mapper;
-    private readonly ILogger<TaskController> _logger;
     private readonly ITaskService _taskService;
-    public TaskController(
-        IMapper mapper,
-        ILogger<TaskController> logger,
-        ITaskService taskService
-        )
+    public TaskController(ITaskService taskService)
     {
-        _mapper = mapper;
-        _logger = logger;
         _taskService = taskService;
     }
     
     [HttpPost]
     public async Task<ActionResult<Domain.Entities.Task>> CreateTask(CreateTaskDto createTaskDto)
     {
-        var task = _mapper.Map<Domain.Entities.Task>(createTaskDto);
-
-        await _taskService.CreateAsync(task);
+        var task = await _taskService.CreateAsync(createTaskDto);
 
         return CreatedAtAction("CreateTask", new { id = task.Id }, task);
     }
@@ -41,38 +31,23 @@ public class TaskController : ControllerBase
     }
     
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateCategory(Guid id, UpdateTaskDto updateTaskDto)
+    public async Task<IActionResult> UpdateTask(Guid id, UpdateTaskDto updateTaskDto)
     {
         if (id != updateTaskDto.Id)
         {
             return BadRequest("Invalid Task Id");
         }
-
-        var category = await _taskService.GetAsync(id);
-
-        if (category == null)
-        {
-            return NotFound($"TaskID {id} is not found.");
-        }
-
-        _mapper.Map(updateTaskDto, category);
-
-        try
-        {
-            await _taskService.UpdateAsync(category);
-        }
-        catch (Exception)
-        {
-            throw new Exception($"Error occured while updating TaskID {id}.");
-        }
-
-        return Ok();
+        
+        await _taskService.UpdateAsync(updateTaskDto);
+        return NoContent();
     }
     
     [HttpGet]
-    public async Task<IEnumerable<Domain.Entities.Task>> GetTask()
+    public async Task<IEnumerable<Domain.Entities.Task>> GetTask(
+        int limit = 20, int offset = 0, int? status = null, DateTime? startDate = null, DateTime? endDate = null
+        )
     {
-        return await _taskService.GetAllAsync();
+        return await _taskService.GetAllAsync(limit, offset, status, startDate, endDate);
     }
     
     

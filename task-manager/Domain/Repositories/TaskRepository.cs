@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using task_manager.Domain.Contexts;
+using task_manager.Domain.Entities;
 using task_manager.Repositories.Contracts;
+using Task = System.Threading.Tasks.Task;
 
 namespace task_manager.Repositories;
 
@@ -30,9 +32,15 @@ public class TaskRepository : ITaskRepository
         }
     }      
 
-    public async Task<List<Domain.Entities.Task>> GetAllAsync()
+    public async Task<List<Domain.Entities.Task>> GetAllAsync(int limit = 20, int offset = 0, Status? status = null, DateTime? startDate = null, DateTime? endDate = null)
     {
-        return await _context.Set<Domain.Entities.Task>().ToListAsync();            
+        return await _context.Set<Domain.Entities.Task>()
+            .Where(e => status == null || e.Status == status)
+            .Where(e => startDate == null || e.DueDate >= startDate)
+            .Where(e => endDate == null || e.DueDate <= endDate)
+            .Skip(offset)
+            .Take(limit)
+            .ToListAsync();            
     }
 
     public async Task<Domain.Entities.Task?> GetAsync(Guid? taskId)

@@ -16,15 +16,4 @@ public class DataContext : DbContext
     }
     
     public DbSet<Domain.Entities.Task> Task { get; set; }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // To increase readability in the database "Status" enum is stored as string
-        modelBuilder
-            .Entity<Domain.Entities.Task>()
-            .Property(e => e.Status)
-            .HasConversion(
-                v => v.ToString(),
-                v => (Status)Enum.Parse(typeof(Status), v));
-    }
 }

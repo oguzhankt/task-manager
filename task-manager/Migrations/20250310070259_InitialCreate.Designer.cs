@@ -11,7 +11,7 @@ using task_manager.Domain.Contexts;
 namespace task_manager.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250309204811_InitialCreate")]
+    [Migration("20250310070259_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -34,9 +34,8 @@ namespace task_manager.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
